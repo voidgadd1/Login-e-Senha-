@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Login e Senha</title>
+</head>
+<body>
+        
+    <h1> Meu Login e Senha  </h1>
+    <br>
+    <label for="login">Login</label>
+    <input id="login" name="login" type="email" maxlength="30" autocomplete="username" required>
+    <br>
+    <label for="senha">Senha</label>
+    <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+     <br>
+     <br>   
+    <button id="salvar" type="button">Salvar</button>
+    
+    <script type="module">
+       import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+
+        import {
+            getAuth,
+            signInWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCi94Iw6JvHQKo62UEmkHAR03Xs4O42xls",
+            authDomain: "login-e-senha-d6722.firebaseapp.com",
+            projectId: "login-e-senha-d6722",
+            storageBucket: "login-e-senha-d6722.firebasestorage.app",
+            messagingSenderId: "631985005964",
+            appId: "1:631985005964:web:a9f2d25e368b2db638e2a9",
+            measurementId: "G-C8LZYNFCXV"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Inicializa o Authentication
+        const auth = getAuth(app);
+
+        // Seleciona os elementos HTML
+        const botao = document.getElementById("salvar");
+        const campoLogin = document.getElementById("login");
+        const campoSenha = document.getElementById("senha");
+
+        botao.addEventListener("click", async () => {
+            const login = campoLogin.value.trim();
+            const senha = campoSenha.value;
+
+            // Verifica se os campos foram preenchidos
+            if (!login || !senha) {
+                alert("Por favor, preencha o login e a senha!");
+                return;
+            }
+
+            botao.disabled = true;
+
+            try {
+                // Envia os dados para o Firebase Authentication
+                const resultado = await signInWithEmailAndPassword(
+                    auth,
+                    login,
+                    senha
+                );
+
+                // Login realizado com sucesso
+                console.log("Usuário autenticado:", resultado.user.uid);
+
+                alert("Login realizado com sucesso!");
+
+                // Aqui você pode redirecionar o usuário:
+                // window.location.href = "pagina-inicial.html";
+
+            } catch (erro) {
+    console.error("Código do erro:", erro.code);
+    console.error("Mensagem completa:", erro.message);
+
+    alert(
+        "Erro do Firebase: " +
+        erro.code +
+        "\n" +
+        erro.message
+    );
+} finally {
+    botao.disabled = false;
+}
+        });
+
+    </script>
+</body>
+</html>
